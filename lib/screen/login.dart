@@ -22,51 +22,43 @@ class _LoginState extends State<Login> {
           // Background with blur
           Positioned.fill(
             child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
               child: Image.asset('assets/images/login2.jpg', fit: BoxFit.cover),
             ),
           ),
 
-          // App title
-          const Positioned.fill(
-            top: 260,
-            left: 140,
-            child: Text(
-              'FitWell',
-              style: TextStyle(
-                color: Colors.orange,
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-
-          // Subtitle
-          const Positioned.fill(
-            top: 330,
-            left: 65,
-            child: Text(
-              'Life is well if You are FitWell !',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-
-          // Scrollable Positioned text fields
+          // Foreground scrollable content
           Positioned.fill(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.only(
-                top: 400,
-                left: 20,
-                right: 20,
-                bottom: 100,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  const SizedBox(height: 200),
+                  const Center(
+                    child: Text(
+                      'FitWell',
+                      style: TextStyle(
+                        color: Colors.orange,
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Center(
+                    child: Text(
+                      'Life is well if You are FitWell !',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 60),
                   TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
@@ -95,8 +87,6 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   const SizedBox(height: 40),
-
-                  // Login button
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
