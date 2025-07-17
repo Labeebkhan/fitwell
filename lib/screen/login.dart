@@ -28,7 +28,7 @@ class _LoginState extends State<Login> {
           ),
 
           // App title
-          const Positioned(
+          const Positioned.fill(
             top: 260,
             left: 140,
             child: Text(
@@ -42,7 +42,7 @@ class _LoginState extends State<Login> {
           ),
 
           // Subtitle
-          const Positioned(
+          const Positioned.fill(
             top: 330,
             left: 65,
             child: Text(
