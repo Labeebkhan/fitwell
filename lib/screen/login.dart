@@ -1,4 +1,7 @@
+import 'package:fitwell/screen/signup.dart';
 import 'package:flutter/material.dart';
+import '../provider/password_visibility_provider.dart';
+import 'package:provider/provider.dart';
 import 'dart:ui';
 
 class Login extends StatefulWidget {
@@ -11,23 +14,21 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
+    final visibilityProvider = Provider.of<PasswordVisibilityProvider>(context);
+
     return Scaffold(
-      resizeToAvoidBottomInset: true, // important to shift UI on keyboard open
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          // Background with blur
+          // Background blur
           Positioned.fill(
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-              child: Image.asset('assets/images/login2.jpg', fit: BoxFit.cover),
-            ),
+            child: Image.asset('assets/images/login2.jpg', fit: BoxFit.cover),
           ),
 
-          // Foreground scrollable content
+          // Foreground content
           Positioned.fill(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
@@ -74,12 +75,21 @@ class _LoginState extends State<Login> {
                   const SizedBox(height: 20),
                   TextField(
                     controller: _passwordController,
-                    obscureText: _obscureText,
+                    obscureText: visibilityProvider.isObscured,
                     decoration: InputDecoration(
                       hintText: 'Password',
                       filled: true,
-                      suffixIcon: const Icon(Icons.visibility_off),
                       fillColor: Colors.white.withOpacity(0.8),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          visibilityProvider.isObscured
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          visibilityProvider.toggleVisibility();
+                        },
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide.none,
@@ -94,7 +104,7 @@ class _LoginState extends State<Login> {
                         horizontal: 50,
                         vertical: 15,
                       ),
-                      minimumSize: const Size(250, 50),
+                      minimumSize: const Size(320, 50),
                       backgroundColor: Colors.orange,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -103,6 +113,30 @@ class _LoginState extends State<Login> {
                     child: const Text(
                       'Login',
                       style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Signup()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 50,
+                        vertical: 15,
+                      ),
+                      minimumSize: const Size(320, 50),
+                      backgroundColor: Color.fromARGB(255, 216, 216, 216),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(color: Colors.black, fontSize: 16),
                     ),
                   ),
                 ],
