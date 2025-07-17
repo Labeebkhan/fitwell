@@ -9,25 +9,28 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true, // important to shift UI on keyboard open
       body: Stack(
         children: [
+          // Background with blur
           Positioned.fill(
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
               child: Image.asset('assets/images/login2.jpg', fit: BoxFit.cover),
             ),
           ),
-          Positioned(
+
+          // App title
+          const Positioned(
             top: 260,
             left: 140,
-            right: 0,
             child: Text(
               'FitWell',
               style: TextStyle(
@@ -37,10 +40,11 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-          Positioned(
+
+          // Subtitle
+          const Positioned(
             top: 330,
             left: 65,
-            right: 0,
             child: Text(
               'Life is well if You are FitWell !',
               style: TextStyle(
@@ -51,12 +55,17 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-          Positioned(
-            child: Container(
-              padding: const EdgeInsets.all(20),
+
+          // Scrollable Positioned text fields
+          Positioned.fill(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                top: 400,
+                left: 20,
+                right: 20,
+                bottom: 100,
+              ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TextField(
                     controller: _emailController,
@@ -70,14 +79,14 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
                     controller: _passwordController,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
                       hintText: 'Password',
                       filled: true,
-                      suffixIcon: Icon(Icons.visibility_off),
+                      suffixIcon: const Icon(Icons.visibility_off),
                       fillColor: Colors.white.withOpacity(0.8),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -85,29 +94,28 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).size.height - 370,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 80),
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  minimumSize: Size(250, 50),
-                  backgroundColor: Colors.orange,
+                  const SizedBox(height: 40),
 
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                  // Login button
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 50,
+                        vertical: 15,
+                      ),
+                      minimumSize: const Size(250, 50),
+                      backgroundColor: Colors.orange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ),
-                ),
-                child: Text(
-                  'Login',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
+                ],
               ),
             ),
           ),
