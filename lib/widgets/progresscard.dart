@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:flutter/material.dart';
 
 class ProgressCard extends StatefulWidget {
@@ -37,7 +36,7 @@ class _ProgressCardState extends State<ProgressCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with Dropdown
+          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -51,45 +50,49 @@ class _ProgressCardState extends State<ProgressCard> {
                 underline: const SizedBox(),
                 icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
                 items:
-                    <String>['Weeks', 'Months'].map((String value) {
+                    ['Weeks', 'Months'].map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(
                           value,
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       );
                     }).toList(),
-                onChanged: (val) {},
+                onChanged: (_) {},
               ),
             ],
           ),
           const SizedBox(height: 12),
 
           // Week Days
-          Row(
-            children:
-                weekDays.map((date) {
-                  bool isToday =
-                      DateFormat('yyyy-MM-dd').format(date) ==
-                      DateFormat('yyyy-MM-dd').format(today);
+          SizedBox(
+            height: 40, // ✅ bounded height to avoid infinite height
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: weekDays.length,
+              itemBuilder: (context, index) {
+                final date = weekDays[index];
+                bool isToday =
+                    DateFormat('yyyy-MM-dd').format(date) ==
+                    DateFormat('yyyy-MM-dd').format(today);
 
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: CircleAvatar(
-                      backgroundColor:
-                          isToday ? Colors.orange : Colors.grey[800],
-                      radius: 18,
-                      child: Text(
-                        '${date.day}',
-                        style: TextStyle(
-                          color: isToday ? Colors.white : Colors.white54,
-                          fontWeight: FontWeight.bold,
-                        ),
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: CircleAvatar(
+                    backgroundColor: isToday ? Colors.orange : Colors.grey[800],
+                    radius: 18,
+                    child: Text(
+                      '${date.day}',
+                      style: TextStyle(
+                        color: isToday ? Colors.white : Colors.white54,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  );
-                }).toList(),
+                  ),
+                );
+              },
+            ),
           ),
           const SizedBox(height: 20),
 

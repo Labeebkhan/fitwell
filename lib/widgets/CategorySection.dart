@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../provider/categoryprovider.dart';
 
-class CategorySection extends StatefulWidget {
-  const CategorySection({super.key});
+class CategoryScreen extends StatefulWidget {
+  const CategoryScreen({super.key});
 
   @override
-  State<CategorySection> createState() => _CategorySectionState();
+  State<CategoryScreen> createState() => _CategoryScreenState();
 }
 
-class _CategorySectionState extends State<CategorySection> {
-  List<String> categories = ['All', 'Chest', 'Back', 'Arms'];
+class _CategoryScreenState extends State<CategoryScreen> {
   String selectedCategory = 'All';
 
   final List<String> allExercises = [
@@ -21,16 +22,12 @@ class _CategorySectionState extends State<CategorySection> {
     'Tricep Dips',
   ];
 
-  Set<String> selectedExercises = {};
-
-  void showExerciseDialog() {
+  void showExerciseDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
-        Set<String> tempSelected = Set.from(selectedExercises);
-
-        return StatefulBuilder(
-          builder: (context, setStateDialog) {
+        return Consumer<CategoryProvider>(
+          builder: (context, provider, _) {
             return Dialog(
               backgroundColor: Colors.grey[900],
               shape: RoundedRectangleBorder(
@@ -45,7 +42,7 @@ class _CategorySectionState extends State<CategorySection> {
                         itemCount: allExercises.length,
                         itemBuilder: (context, index) {
                           final exercise = allExercises[index];
-                          final isSelected = tempSelected.contains(exercise);
+                          final isSelected = provider.isSelected(exercise);
 
                           return ListTile(
                             title: Text(
@@ -63,33 +60,20 @@ class _CategorySectionState extends State<CategorySection> {
                                     )
                                     : null,
                             onTap: () {
-                              setStateDialog(() {
-                                if (isSelected) {
-                                  tempSelected.remove(exercise);
-                                } else {
-                                  tempSelected.add(exercise);
-                                }
-                              });
+                              provider.toggleExercise(exercise);
                             },
                           );
                         },
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          selectedExercises = tempSelected;
-                          for (var exercise in selectedExercises) {
-                            if (!categories.contains(exercise)) {
-                              categories.add(exercise);
-                            }
-                          }
-                        });
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Confirm Selection'),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text(
+                        'Done',
+                        style: TextStyle(color: Colors.orange),
+                      ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                   ],
                 ),
               ),
@@ -100,31 +84,30 @@ class _CategorySectionState extends State<CategorySection> {
     );
   }
 
-  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<CategoryProvider>(context);
+    final categories = provider.categories;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Category Header
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
               'Category',
-              style: TextStyle(color: Colors.white, fontSize: 16),
+              style: TextStyle(color: Colors.white, fontSize: 18),
             ),
-            GestureDetector(
-              onTap: showExerciseDialog,
+            TextButton(
+              onPressed: () => showExerciseDialog(context),
               child: const Text(
                 'See All',
-                style: TextStyle(color: Colors.orange, fontSize: 13),
+                style: TextStyle(color: Colors.orange),
               ),
             ),
           ],
         ),
         const SizedBox(height: 12),
-
-        // Horizontally Scrollable Categories
         SizedBox(
           height: 40,
           child: ListView.separated(
@@ -135,26 +118,30 @@ class _CategorySectionState extends State<CategorySection> {
               final category = categories[index];
               final isSelected = category == selectedCategory;
 
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedCategory = category;
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isSelected ? Colors.orange : Colors.grey[850],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    category,
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : Colors.white70,
-                      fontWeight: FontWeight.w500,
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: isSelected ? Colors.orange : Colors.grey[850],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = category;
+                    });
+                  },
+                  child: Center(
+                    child: Text(
+                      category,
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.white70,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),

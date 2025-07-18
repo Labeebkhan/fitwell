@@ -13,7 +13,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 50.0, left: 18, right: 18),
@@ -56,12 +56,12 @@ class _HomeState extends State<Home> {
                 ],
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 40),
 
               // Progress Tracker Section
               ProgressCard(),
-              const SizedBox(height: 20),
-              const CategorySection(),
+              const SizedBox(height: 40),
+              CategoryScreen(),
             ],
           ),
         ),
