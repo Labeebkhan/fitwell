@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../provider/password_visibility_provider.dart';
 import 'package:provider/provider.dart';
-import 'dart:ui';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -14,7 +13,6 @@ class _SignupState extends State<Signup> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +89,7 @@ class _SignupState extends State<Signup> {
                   const SizedBox(height: 20),
                   TextField(
                     controller: _passwordController,
-                    obscureText: _obscureText,
+                    obscureText: visibilityProvider.isObscured,
                     decoration: InputDecoration(
                       hintText: 'Password',
                       filled: true,

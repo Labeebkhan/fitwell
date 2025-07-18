@@ -2,7 +2,6 @@ import 'package:fitwell/screen/signup.dart';
 import 'package:flutter/material.dart';
 import '../provider/password_visibility_provider.dart';
 import 'package:provider/provider.dart';
-import 'dart:ui';
 
 class Login extends StatefulWidget {
   const Login({super.key});
