@@ -4,7 +4,7 @@ import 'provider/splash_provider.dart';
 import 'provider/password_visibility_provider.dart';
 import 'provider/categoryprovider.dart'; // ✅ Added import
 import 'splashscreen/splash.dart';
-import 'screen/home.dart';
+// import 'screen/home.dart';
 import 'screen/login.dart';
 
 void main() {
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => const SplashScreen(),
-        '/login': (context) => Home(),
+        '/login': (context) => Login(),
       },
     );
   }

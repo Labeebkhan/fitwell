@@ -1,3 +1,4 @@
+import 'package:fitwell/screen/home.dart';
 import 'package:fitwell/screen/signup.dart';
 import 'package:flutter/material.dart';
 import '../provider/password_visibility_provider.dart';
@@ -97,7 +98,12 @@ class _LoginState extends State<Login> {
                   ),
                   const SizedBox(height: 40),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Home()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 50,
