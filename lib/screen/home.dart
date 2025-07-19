@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fitwell/widgets/CategorySection.dart';
 import 'package:fitwell/widgets/progresscard.dart';
 import 'package:fitwell/widgets/homedrawer.dart';
+import 'package:fitwell/widgets/ExerciseSec.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -70,6 +71,8 @@ class _HomeState extends State<Home> {
               ProgressCard(),
               const SizedBox(height: 40),
               CategoryScreen(),
+              const SizedBox(height: 50),
+              ExerciseContainer(),
             ],
           ),
         ),

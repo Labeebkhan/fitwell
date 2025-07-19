@@ -5,7 +5,7 @@ import 'provider/password_visibility_provider.dart';
 import 'provider/categoryprovider.dart';
 import 'provider/Drawer.dart';
 import 'splashscreen/splash.dart';
-// import 'screen/home.dart';
+import 'screen/home.dart';
 import 'screen/login.dart';
 
 void main() {
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.orange),
       routes: {
         '/': (context) => const SplashScreen(),
-        '/login': (context) => Login(),
+        '/login': (context) => Home(),
       },
     );
   }
