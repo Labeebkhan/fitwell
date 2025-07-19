@@ -122,7 +122,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
+                  horizontal: 20,
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(

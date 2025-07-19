@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fitwell/widgets/CategorySection.dart';
 import 'package:fitwell/widgets/progresscard.dart';
+import 'package:fitwell/widgets/homedrawer.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,17 +11,20 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      endDrawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 50.0, left: 18, right: 18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Profile Header
               Row(
                 children: [
                   CircleAvatar(
@@ -48,17 +52,21 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                   const Spacer(),
-                  CircleAvatar(
-                    backgroundColor: Colors.white10,
-                    radius: 25,
-                    child: Icon(Icons.menu, color: Colors.white, size: 23),
+
+                  // 🔘 Menu Icon that opens right drawer
+                  GestureDetector(
+                    onTap: () {
+                      _scaffoldKey.currentState?.openEndDrawer();
+                    },
+                    child: const CircleAvatar(
+                      backgroundColor: Colors.white10,
+                      radius: 25,
+                      child: Icon(Icons.menu, color: Colors.white, size: 23),
+                    ),
                   ),
                 ],
               ),
-
               const SizedBox(height: 40),
-
-              // Progress Tracker Section
               ProgressCard(),
               const SizedBox(height: 40),
               CategoryScreen(),
