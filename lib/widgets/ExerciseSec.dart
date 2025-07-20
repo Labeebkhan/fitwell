@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ExerciseContainer extends StatelessWidget {
-  // Example data
   final List<Map<String, String>> exercises = [
     {'name': 'Push Ups', 'image': 'assets/images/pushup.jpg'},
     {'name': 'Squats', 'image': 'assets/images/squat.jpg'},
@@ -19,43 +18,96 @@ class ExerciseContainer extends StatelessWidget {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Container(
-              width: 280,
-              decoration: BoxDecoration(
-                color: Colors.grey[900],
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Stack(
-                children: [
-                  // Exercise Image
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Image.asset(
-                      exercises[index]['image']!,
-                      height: 260,
-                      width: 280,
-                      fit: BoxFit.cover,
-                    ),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => ExerciseDetailPage(
+                          name: exercises[index]['name']!,
+                          image: exercises[index]['image']!,
+                        ),
                   ),
-                  // Overlay Text
-                  Positioned(
-                    bottom: 10,
-                    left: 10,
-                    child: Text(
-                      exercises[index]['name']!,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        backgroundColor: Colors.black54,
+                );
+              },
+              child: Container(
+                width: 290,
+                decoration: BoxDecoration(
+                  color: Colors.grey[900],
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        exercises[index]['image']!,
+                        height: 260,
+                        width: 290,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                ],
+                    Positioned(
+                      bottom: 10,
+                      left: 10,
+                      child: Text(
+                        exercises[index]['name']!,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class ExerciseDetailPage extends StatelessWidget {
+  final String name;
+  final String image;
+
+  ExerciseDetailPage({required this.name, required this.image});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.orange),
+        title: Text(
+          '$name Videos',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.orange,
+          ),
+        ),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(image),
+          SizedBox(height: 20),
+          Text(
+            'Videos for $name',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.orange,
+            ),
+          ),
+          // TODO: You can replace this with your video list or player widgets
+        ],
       ),
     );
   }
