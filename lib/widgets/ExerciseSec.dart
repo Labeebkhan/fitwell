@@ -106,7 +106,7 @@ class ExerciseDetailPage extends StatelessWidget {
               color: Colors.orange,
             ),
           ),
-          // TODO: You can replace this with your video list or player widgets
+          //I can replace this with video list or player widgets
         ],
       ),
     );
