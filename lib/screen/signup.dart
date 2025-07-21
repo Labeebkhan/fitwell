@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../provider/password_visibility_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../provider/password_visibility_provider.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -14,22 +16,82 @@ class _SignupState extends State<Signup> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
+  bool _isLoading = false; // For showing spinner
+
+  Future<void> _signUp() async {
+    final String name = _nameController.text.trim();
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
+
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please fill all fields')));
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final auth = FirebaseAuth.instance;
+      final firestore = FirebaseFirestore.instance;
+
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Save extra user data to Firestore
+      await firestore.collection('users').doc(userCredential.user!.uid).set({
+        'name': name,
+        'email': email,
+        'createdAt': DateTime.now(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Signup successful! Please login.')),
+      );
+
+      Navigator.pop(context); // Navigate back to login
+    } on FirebaseAuthException catch (e) {
+      String errorMsg = '';
+      if (e.code == 'email-already-in-use') {
+        errorMsg = 'This email is already registered!';
+      } else if (e.code == 'weak-password') {
+        errorMsg = 'Password is too weak!';
+      } else {
+        errorMsg = 'Signup failed. Try again.';
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(errorMsg)));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred. Please try again.')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final visibilityProvider = Provider.of<PasswordVisibilityProvider>(context);
     return Scaffold(
-      resizeToAvoidBottomInset: true, // important to shift UI on keyboard open
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          // Background with blur
           Positioned.fill(
             child: Image.asset(
               'assets/images/loginback.jpg',
               fit: BoxFit.cover,
             ),
           ),
-
-          // Foreground scrollable content
           Positioned.fill(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 60),
@@ -111,25 +173,29 @@ class _SignupState extends State<Signup> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 15,
+
+                  _isLoading
+                      ? CircularProgressIndicator(color: Colors.orange)
+                      : ElevatedButton(
+                        onPressed: _signUp,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 50,
+                            vertical: 15,
+                          ),
+                          minimumSize: const Size(320, 50),
+                          backgroundColor: Colors.orange,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text(
+                          'Sign Up',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
                       ),
-                      minimumSize: const Size(320, 50),
-                      backgroundColor: Colors.orange,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Text(
-                      'Sign In',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                  SizedBox(height: 20),
+
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -139,7 +205,7 @@ class _SignupState extends State<Signup> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pop(context); // Goes back to Login page
+                          Navigator.pop(context);
                         },
                         child: Text(
                           "Login",
