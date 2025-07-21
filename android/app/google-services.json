@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "375572891233",
+    "project_id": "fitwell-6dde3",
+    "storage_bucket": "fitwell-6dde3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375572891233:android:5c39c79fd2722bb9a7cc20",
+        "android_client_info": {
+          "package_name": "com.example.fitwell"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB1Hop8kS5qbfsrlIHF_T8sVVxXt5zrpA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
